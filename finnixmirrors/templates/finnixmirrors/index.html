@@ -1,0 +1,50 @@
+{% extends "./base.html" %}
+
+{% block content %}
+<h1>Finnix Mirrors</h1>
+<div id="map" style="width:100%; height:320px"></div>
+<script type="text/javascript">
+var map = makemap("map", 0, 30, 1);
+var markers_good = new OpenLayers.Layer.Markers( "Good mirrors" );
+map.addLayer(markers_good);
+var markers_outdated = new OpenLayers.Layer.Markers( "Outdated mirrors" );
+map.addLayer(markers_outdated);
+var markers_error = new OpenLayers.Layer.Markers( "Down mirrors" );
+map.addLayer(markers_error);
+
+// xxx
+</script>
+
+<table class="table table-striped">
+<tr>
+<th>Country</th>
+<th>Mirror</th>
+<th>URL</th>
+<th>Status</th>
+<th>Last Sync</th>
+<th>Sponsor</th>
+</tr>
+{% for mirror in mirrors %}
+<tr class="{% if mirror.status != 'good' %}danger{% endif %}">
+<td>{{ mirror.country }}</td>
+<td><!-- <a href="{% url 'mirror' mirror %}">{{ mirror.slug }}</a> -->{{ mirror.slug }}</td>
+<td>
+{% for mirrorurl in mirror.mirrorurls|dictsort:"protocol" %}
+<a href="{{ mirrorurl.url }}" class="proto-{{ mirrorurl.protocol }}{% if mirrorurl.outdated or not mirrorurl.check_success %} link-down{% endif %}">{{ mirrorurl.protocol }}{% if not mirrorurl.ipv6 %}<sup class="ipv4">4</sup>{% endif %}</a>
+{% endfor %}
+</td>
+<td>{{ mirror.status }}</td>
+<td>{{ mirror.urls_last_trace }}</td>
+<td><a href="{{ mirror.sponsor_url }}">{{ mirror.sponsor }}</a></td>
+</tr>
+<script type="text/javascript">
+setMarker(map, {{ mirror.longitude }}, {{ mirror.latitude }}, icon_{% if mirror.status == 'error' %}red{% elif mirror.status == 'outdated' %}orange{% else %}green{% endif %}, markers_{% if not mirror.status == 'error' %}error{% elif mirror.status == 'outdated' %}outdated{% else %}good{% endif %}, '{{ mirror.slug }}', 0);
+</script>
+{% endfor %}
+</table>
+<h2>Tools</h2>
+<ul>
+<li><a href="http://www.finnix.org/Mirrors">General mirror information</a></li>
+</ul>
+<p><a href="http://www.finnix.org/">Finnix</a></p>
+{% endblock %}

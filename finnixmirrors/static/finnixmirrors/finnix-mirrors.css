@@ -1,0 +1,21 @@
+.container {
+  padding-top: 2em;
+  font-size: 120%;
+}
+
+h1 a, h1 a:visited {
+  color: inherit;
+  text-decoration: inherit;
+}
+
+.link-down {
+  text-decoration: line-through;
+}
+
+.error-recent {
+  color: #990000;
+}
+
+a.proto-https {
+  color: #44b733;
+}
