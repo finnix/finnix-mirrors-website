@@ -68,5 +68,4 @@ class Command(BaseCommand):
         for mirrorurl in MirrorURL.objects.filter(
             enabled=True, mirror__enabled=True, protocol__in=["http", "https"]
         ):
-            print(mirrorurl.url)
             self.check_mirrorurl(mirrorurl)
