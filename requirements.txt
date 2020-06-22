@@ -1,0 +1,4 @@
+Django
+django-xff
+requests
+python-dateutil

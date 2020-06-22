@@ -1,15 +1,28 @@
-FIND := find
 PYTHON := python3
 
-all:
+all: build
+
+build:
+	$(PYTHON) setup.py build
 
 lint:
-	$(FIND) finnixmirrors -name '*.py' \
-		-not -wholename 'finnixmirrors/migrations/*.py' -print0 | xargs \
-		-0 $(PYTHON) -mflake8 --config=/dev/null \
-		--ignore=C901,E203,E231,W503 --max-line-length=120
+	$(PYTHON) -mtox -e flake8
 
-test: lint
+test:
+	$(PYTHON) -mtox
+
+test-quick:
+	$(PYTHON) -mtox -e black,flake8,pytest-quick
+
+black-check:
+	$(PYTHON) -mtox -e black
 
 black:
-	$(PYTHON) -mblack --exclude=migrations $(CURDIR)
+	$(PYTHON) -mblack $(CURDIR)
+
+install: build
+	$(PYTHON) setup.py install
+
+clean:
+	$(PYTHON) setup.py clean
+	$(RM) -r build MANIFEST

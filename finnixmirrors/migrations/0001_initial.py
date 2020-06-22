@@ -9,41 +9,76 @@ class Migration(migrations.Migration):
 
     initial = True
 
-    dependencies = [
-    ]
+    dependencies = []
 
     operations = [
         migrations.CreateModel(
-            name='Mirror',
+            name="Mirror",
             fields=[
-                ('id', models.UUIDField(default=uuid.uuid4, editable=False, primary_key=True, serialize=False)),
-                ('slug', models.SlugField(unique=True)),
-                ('enabled', models.BooleanField(default=True)),
-                ('country', models.CharField(blank=True, max_length=2, null=True)),
-                ('location', models.CharField(blank=True, max_length=200, null=True)),
-                ('latitude', models.FloatField(blank=True, null=True)),
-                ('longitude', models.FloatField(blank=True, null=True)),
-                ('map_zoom', models.IntegerField(blank=True, null=True)),
-                ('sponsor', models.CharField(blank=True, max_length=200, null=True)),
-                ('sponsor_url', models.CharField(blank=True, max_length=4095, null=True)),
+                (
+                    "id",
+                    models.UUIDField(
+                        default=uuid.uuid4,
+                        editable=False,
+                        primary_key=True,
+                        serialize=False,
+                    ),
+                ),
+                ("slug", models.SlugField(unique=True)),
+                ("enabled", models.BooleanField(default=True)),
+                ("country", models.CharField(blank=True, max_length=2, null=True)),
+                ("location", models.CharField(blank=True, max_length=200, null=True)),
+                ("latitude", models.FloatField(blank=True, null=True)),
+                ("longitude", models.FloatField(blank=True, null=True)),
+                ("map_zoom", models.IntegerField(blank=True, null=True)),
+                ("sponsor", models.CharField(blank=True, max_length=200, null=True)),
+                (
+                    "sponsor_url",
+                    models.CharField(blank=True, max_length=4095, null=True),
+                ),
             ],
         ),
         migrations.CreateModel(
-            name='MirrorURL',
+            name="MirrorURL",
             fields=[
-                ('id', models.UUIDField(default=uuid.uuid4, editable=False, primary_key=True, serialize=False)),
-                ('url', models.CharField(blank=True, max_length=4095, null=True)),
-                ('protocol', models.CharField(choices=[('http', 'HTTP'), ('https', 'HTTPS'), ('ftp', 'FTP'), ('rsync', 'Rsync')], max_length=200)),
-                ('ipv4', models.BooleanField(default=True)),
-                ('ipv6', models.BooleanField(default=False)),
-                ('enabled', models.BooleanField(default=True)),
-                ('weight', models.FloatField(default=1.0)),
-                ('check_success', models.BooleanField(default=True)),
-                ('check_detail', models.TextField(blank=True, null=True)),
-                ('date_last_check', models.DateTimeField(blank=True, null=True)),
-                ('date_last_success', models.DateTimeField(blank=True, null=True)),
-                ('date_last_trace', models.DateTimeField(blank=True, null=True)),
-                ('mirror', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='finnixmirrors.Mirror')),
+                (
+                    "id",
+                    models.UUIDField(
+                        default=uuid.uuid4,
+                        editable=False,
+                        primary_key=True,
+                        serialize=False,
+                    ),
+                ),
+                ("url", models.CharField(blank=True, max_length=4095, null=True)),
+                (
+                    "protocol",
+                    models.CharField(
+                        choices=[
+                            ("http", "HTTP"),
+                            ("https", "HTTPS"),
+                            ("ftp", "FTP"),
+                            ("rsync", "Rsync"),
+                        ],
+                        max_length=200,
+                    ),
+                ),
+                ("ipv4", models.BooleanField(default=True)),
+                ("ipv6", models.BooleanField(default=False)),
+                ("enabled", models.BooleanField(default=True)),
+                ("weight", models.FloatField(default=1.0)),
+                ("check_success", models.BooleanField(default=True)),
+                ("check_detail", models.TextField(blank=True, null=True)),
+                ("date_last_check", models.DateTimeField(blank=True, null=True)),
+                ("date_last_success", models.DateTimeField(blank=True, null=True)),
+                ("date_last_trace", models.DateTimeField(blank=True, null=True)),
+                (
+                    "mirror",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="finnixmirrors.Mirror",
+                    ),
+                ),
             ],
         ),
     ]

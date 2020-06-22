@@ -1,0 +1,9 @@
+include Makefile
+include manage.py
+include MANIFEST.in
+include README.md
+include requirements.txt
+include tests/*.py
+include tox.ini
+recursive-include finnixmirrors/static/finnixmirrors *.css *.js *.png *.gif *.jpg
+include finnixmirrors/templates/finnixmirrors/*.html
