@@ -49,7 +49,10 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "xff.middleware.XForwardedForMiddleware",
 ]
+XFF_TRUSTED_PROXY_DEPTH = 1
+XFF_STRICT = True
 
 ROOT_URLCONF = "finnixmirrors.urls"
 

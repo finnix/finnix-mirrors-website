@@ -2,3 +2,5 @@ Django
 django-xff
 requests
 python-dateutil
+geoip2
+geopy

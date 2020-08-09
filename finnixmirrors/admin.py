@@ -7,6 +7,7 @@ class MirrorAdmin(admin.ModelAdmin):
     list_display = ("slug", "enabled", "country", "sponsor")
     ordering = ("slug",)
     search_fields = ("slug", "sponsor", "location")
+    list_filter = ("enabled",)
 
 
 class MirrorURLAdmin(admin.ModelAdmin):
@@ -14,6 +15,7 @@ class MirrorURLAdmin(admin.ModelAdmin):
         "protocol",
         "mirror",
         "enabled",
+        "weight",
         "check_success",
         "date_last_check",
         "date_last_success",
@@ -21,6 +23,7 @@ class MirrorURLAdmin(admin.ModelAdmin):
     )
     ordering = ("mirror", "protocol")
     search_fields = ("mirror",)
+    list_filter = ("enabled", "check_success")
 
 
 admin.site.register(Mirror, MirrorAdmin)
