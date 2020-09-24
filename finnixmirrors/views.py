@@ -92,15 +92,14 @@ def releases(request, path=""):
     outdated_time = now - timedelta(hours=28)
     ip = ipaddress.ip_address(request.META["REMOTE_ADDR"])
 
-    mirrorurls = []
-    for mirrorurl in MirrorURL.objects.filter(
-        enabled=True, mirror__enabled=True, protocol="https"
-    ):
-        if not mirrorurl.check_success:
-            continue
-        if mirrorurl.date_last_trace and mirrorurl.date_last_trace < outdated_time:
-            continue
-        mirrorurls.append(mirrorurl)
+    mirrorurls = MirrorURL.objects.filter(
+        enabled=True,
+        protocol="https",
+        check_success=True,
+        date_last_trace__isnull=False,
+        date_last_trace__gte=outdated_time,
+        mirror__enabled=True,
+    )
 
     geoip_mirror = get_geoip_mirror(mirrorurls, ip)
 
