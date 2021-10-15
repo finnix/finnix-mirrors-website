@@ -1,0 +1,10 @@
+#!/bin/sh
+
+if [ -e "/srv/django/lib/${DJANGO_MODULE}_settings.py" ]; then
+    export DJANGO_SETTINGS_MODULE="${DJANGO_MODULE}_settings"
+fi
+if [ -d /srv/django/lib ]; then
+    gunicorn -b 0.0.0.0:8000 -k gthread --pythonpath /srv/django/lib "${DJANGO_MODULE}.wsgi:application"
+else
+    gunicorn -b 0.0.0.0:8000 -k gthread "${DJANGO_MODULE}.wsgi:application"
+fi
