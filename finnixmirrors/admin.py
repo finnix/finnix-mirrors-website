@@ -22,7 +22,7 @@ class MirrorURLAdmin(admin.ModelAdmin):
         "date_last_trace",
     )
     ordering = ("mirror", "protocol")
-    search_fields = ("mirror",)
+    search_fields = ("mirror__slug", "mirror__sponsor", "url")
     list_filter = ("enabled", "check_success")
 
 
