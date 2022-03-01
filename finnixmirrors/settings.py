@@ -115,3 +115,31 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
 STATIC_URL = "/static/"
+
+# Settings for the "checkmirrors" command
+
+CHECK_TRACE_FILE = "project/trace/feh.colobox.com"
+CHECK_DATA_FILES = [
+    {
+        "path": "109/finnix-109.iso",
+        "length": 137363456,
+        "ranges": [
+            {
+                "begin": 1048576,
+                "end": 1049599,
+                "sha256sum": "8b1be9ef19e1f061a0a64d56be8e46d4e74098275770c1f42462c0674df0bfc8",
+            }
+        ],
+    },
+    {
+        "path": "123/finnix-123.iso",
+        "length": 432013312,
+        "ranges": [
+            {
+                "begin": 1048576,
+                "end": 1049599,
+                "sha256sum": "8b1eabced84a7fc31d8ce274cb5d488e12c7f0d022cdb265a5796115d30aa3f7",
+            }
+        ],
+    },
+]

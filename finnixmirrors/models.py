@@ -52,6 +52,8 @@ class MirrorURL(models.Model):
     date_last_check = models.DateTimeField(blank=True, null=True)
     date_last_success = models.DateTimeField(blank=True, null=True)
     date_last_trace = models.DateTimeField(blank=True, null=True)
+    head_allowed = models.BooleanField(default=False)
+    range_allowed = models.BooleanField(default=False)
 
     def __str__(self):
         return "{} {}".format(self.mirror.slug, self.protocol)
