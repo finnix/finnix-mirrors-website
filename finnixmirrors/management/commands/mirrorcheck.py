@@ -125,6 +125,7 @@ class Command(BaseCommand):
                     tmp.name,
                 ],
                 encoding="UTF-8",
+                stderr=subprocess.STDOUT,
             )
         except subprocess.CalledProcessError as e:
             return self.mirrorurl_failure(mirrorurl, str(e))
