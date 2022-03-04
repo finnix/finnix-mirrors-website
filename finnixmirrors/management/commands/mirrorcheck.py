@@ -163,10 +163,11 @@ class Command(BaseCommand):
         opt_filter = {}
         if options["mirror"]:
             opt_filter["mirror__slug__in"] = options["mirror"]
+        else:
+            opt_filter["mirror__enabled"] = True
 
         for mirrorurl in MirrorURL.objects.filter(
             enabled=True,
-            mirror__enabled=True,
             protocol__in=["http", "https", "rsync", "ftp"],
             **opt_filter,
         ):
