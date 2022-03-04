@@ -3,7 +3,7 @@ import ipaddress
 import random
 
 from django.conf import settings
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.template import loader
 from django.utils import timezone
 from django.views import generic
@@ -26,7 +26,7 @@ class MirrorView(generic.DetailView):
     model = Mirror
 
 
-def index(request):
+def _mirror_info():
     now = timezone.now()
     outdated_time = now - timedelta(hours=28)
 
@@ -51,8 +51,43 @@ def index(request):
         setattr(mirror, "mirrorurls", mirrorurls)
         setattr(mirror, "status", status)
         mirrors.append(mirror)
+    return mirrors
 
-    context = {"mirrors": mirrors}
+
+def mirrors_json(request):
+    out = {}
+    for mirror in _mirror_info():
+        m = {
+            "country": mirror.country,
+            "location": mirror.location,
+            "sponsor": mirror.sponsor,
+            "sponsor_url": mirror.sponsor_url,
+            "latitude": mirror.latitude,
+            "longitude": mirror.longitude,
+            "urls": [],
+        }
+        for mirrorurl in mirror.mirrorurls:
+            m["urls"].append(
+                {
+                    "url": mirrorurl.url,
+                    "protocol": mirrorurl.protocol,
+                    "ipv4": mirrorurl.ipv4,
+                    "ipv6": mirrorurl.ipv6,
+                    "check_success": mirrorurl.check_success,
+                    "date_last_check": mirrorurl.date_last_check,
+                    "date_last_success": mirrorurl.date_last_success,
+                    "date_last_trace": mirrorurl.date_last_trace,
+                    "head_allowed": mirrorurl.head_allowed,
+                    "range_allowed": mirrorurl.range_allowed,
+                }
+            )
+        out[mirror.slug] = m
+
+    return JsonResponse({"mirrors": out})
+
+
+def index(request):
+    context = {"mirrors": _mirror_info()}
     template = loader.get_template("finnixmirrors/index.html")
     return HttpResponse(template.render(context, request))
 
