@@ -6,7 +6,7 @@ from django.conf import settings
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.template import loader
 from django.utils import timezone
-from django.views import generic
+from django.views.generic.detail import DetailView
 
 try:
     import geoip2.database as geoip_db
@@ -21,35 +21,44 @@ except ImportError as e:
 from .models import Mirror, MirrorURL
 
 
-class MirrorView(generic.DetailView):
+class MirrorView(DetailView):
     template_name = "finnixmirrors/mirror.html"
     model = Mirror
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        _mirror_populate(context["mirror"])
+        return context
 
-def _mirror_info():
+
+def _mirror_populate(mirror):
     now = timezone.now()
     outdated_time = now - timedelta(hours=28)
 
+    status = "good"
+    mirrorurls = mirror.mirrorurl_set.filter(enabled=True)
+    for mirrorurl in mirrorurls:
+        setattr(mirrorurl, "outdated", False)
+        if mirrorurl.date_last_trace and mirrorurl.date_last_trace < outdated_time:
+            setattr(mirrorurl, "outdated", True)
+            status = "outdated"
+    for mirrorurl in mirrorurls:
+        if not mirrorurl.check_success:
+            status = "error"
+            break
+    setattr(
+        mirror,
+        "urls_last_trace",
+        max([x.date_last_trace for x in mirrorurls if x.date_last_trace]),
+    )
+    setattr(mirror, "mirrorurls", mirrorurls)
+    setattr(mirror, "status", status)
+
+
+def _mirror_info():
     mirrors = []
     for mirror in Mirror.objects.filter(enabled=True).order_by("country", "slug"):
-        status = "good"
-        mirrorurls = mirror.mirrorurl_set.filter(enabled=True)
-        for mirrorurl in mirrorurls:
-            setattr(mirrorurl, "outdated", False)
-            if mirrorurl.date_last_trace and mirrorurl.date_last_trace < outdated_time:
-                setattr(mirrorurl, "outdated", True)
-                status = "outdated"
-        for mirrorurl in mirrorurls:
-            if not mirrorurl.check_success:
-                status = "error"
-                break
-        setattr(
-            mirror,
-            "urls_last_trace",
-            max([x.date_last_trace for x in mirrorurls if x.date_last_trace]),
-        )
-        setattr(mirror, "mirrorurls", mirrorurls)
-        setattr(mirror, "status", status)
+        _mirror_populate(mirror)
         mirrors.append(mirror)
     return mirrors
 

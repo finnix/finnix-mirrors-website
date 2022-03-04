@@ -13,8 +13,6 @@ var markers_outdated = new OpenLayers.Layer.Markers( "Outdated mirrors" );
 map.addLayer(markers_outdated);
 var markers_error = new OpenLayers.Layer.Markers( "Down mirrors" );
 map.addLayer(markers_error);
-
-// xxx
 </script>
 
 <table class="table table-striped">
@@ -29,7 +27,7 @@ map.addLayer(markers_error);
 {% for mirror in mirrors %}
 <tr class="{% if mirror.status != 'good' %}danger{% endif %}">
 <td>{{ mirror.country }}</td>
-<td><!-- <a href="{% url 'mirror' mirror %}">{{ mirror.slug }}</a> -->{{ mirror.slug }}</td>
+<td><a href="{% url 'mirror' mirror %}">{{ mirror.slug }}</a></td>
 <td>
 {% for mirrorurl in mirror.mirrorurls|dictsort:"protocol" %}
 <a href="{{ mirrorurl.url }}" class="proto-{{ mirrorurl.protocol }}{% if mirrorurl.outdated or not mirrorurl.check_success %} link-down{% endif %}">{{ mirrorurl.protocol }}{% if not mirrorurl.ipv6 %}<sup class="ipv4">4</sup>{% endif %}</a>
@@ -44,9 +42,5 @@ setMarker(map, {{ mirror.longitude }}, {{ mirror.latitude }}, icon_{% if mirror.
 </script>
 {% endfor %}
 </table>
-<h2>Tools</h2>
-<ul>
-<li><a href="https://github.com/finnix/finnix-docs/blob/main/mirrors.md">General mirror information</a></li>
-</ul>
-<p><a href="http://www.finnix.org/">Finnix</a></p>
+<p class="text-right"><a href="https://github.com/finnix/finnix-docs/blob/main/mirrors.md">General mirror information</a> • <a href="https://www.finnix.org/">Finnix</a></p>
 {% endblock %}
