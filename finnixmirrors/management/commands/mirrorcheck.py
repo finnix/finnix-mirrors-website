@@ -46,26 +46,16 @@ class Command(BaseCommand):
         now = timezone.now()
         mirrorurl.date_last_check = now
         if settings.CHECK_TRACE_FILE:
-            try:
-                r = self.request_url(
-                    "{}/{}".format(mirrorurl.url, settings.CHECK_TRACE_FILE)
-                )
-            except requests.exceptions.RequestException as e:
-                return self.mirrorurl_failure(mirrorurl, str(e))
-
-            try:
-                mirrorurl.date_last_trace = dateutil.parser.parse(r.text.strip())
-            except ValueError as e:
-                return self.mirrorurl_failure(mirrorurl, str(e))
+            r = self.request_url(
+                "{}/{}".format(mirrorurl.url, settings.CHECK_TRACE_FILE)
+            )
+            mirrorurl.date_last_trace = dateutil.parser.parse(r.text.strip())
 
         for data_file in settings.CHECK_DATA_FILES:
             if mirrorurl.head_allowed:
-                try:
-                    r = self.request_url(
-                        "{}/{}".format(mirrorurl.url, data_file["path"]), method="HEAD"
-                    )
-                except requests.exceptions.RequestException as e:
-                    return self.mirrorurl_failure(mirrorurl, str(e))
+                r = self.request_url(
+                    "{}/{}".format(mirrorurl.url, data_file["path"]), method="HEAD"
+                )
 
                 head_got_length = int(r.headers["content-length"])
                 if head_got_length != data_file["length"]:
@@ -78,17 +68,12 @@ class Command(BaseCommand):
 
             if mirrorurl.range_allowed:
                 for range in data_file.get("ranges", []):
-                    try:
-                        r = self.request_url(
-                            "{}/{}".format(mirrorurl.url, data_file["path"]),
-                            headers={
-                                "Range": "bytes={}-{}".format(
-                                    range["begin"], range["end"]
-                                )
-                            },
-                        )
-                    except requests.exceptions.RequestException as e:
-                        return self.mirrorurl_failure(mirrorurl, str(e))
+                    r = self.request_url(
+                        "{}/{}".format(mirrorurl.url, data_file["path"]),
+                        headers={
+                            "Range": "bytes={}-{}".format(range["begin"], range["end"])
+                        },
+                    )
 
                     sha256sum_got = hashlib.sha256(r.content).hexdigest()
                     if sha256sum_got != range["sha256sum"]:
@@ -114,32 +99,25 @@ class Command(BaseCommand):
         if not settings.CHECK_TRACE_FILE:
             return
         tmp = tempfile.NamedTemporaryFile(mode="w+", encoding="UTF-8")
-        try:
-            res = subprocess.check_output(
-                [
-                    "rsync",
-                    "-v",
-                    "--timeout=10",
-                    "--contimeout=10",
-                    "{}/{}".format(mirrorurl.url, settings.CHECK_TRACE_FILE),
-                    tmp.name,
-                ],
-                encoding="UTF-8",
-                stderr=subprocess.STDOUT,
-            )
-        except subprocess.CalledProcessError as e:
-            return self.mirrorurl_failure(mirrorurl, str(e))
+        res = subprocess.check_output(
+            [
+                "rsync",
+                "-v",
+                "--timeout=10",
+                "--contimeout=10",
+                "{}/{}".format(mirrorurl.url, settings.CHECK_TRACE_FILE),
+                tmp.name,
+            ],
+            encoding="UTF-8",
+            stderr=subprocess.STDOUT,
+        )
 
         # In theory, tmp.read() should just work and we wouldn't need to re-open.
         # In practice, it always returns an empty string in the Django environment,
         # and I've never been able to figure out why.
         with open(tmp.name) as f:
             date_last_trace_text = f.read().strip()
-
-        try:
-            mirrorurl.date_last_trace = dateutil.parser.parse(date_last_trace_text)
-        except ValueError as e:
-            return self.mirrorurl_failure(mirrorurl, str(e))
+        mirrorurl.date_last_trace = dateutil.parser.parse(date_last_trace_text)
 
         mirrorurl.check_success = True
         mirrorurl.date_last_success = now
@@ -161,20 +139,13 @@ class Command(BaseCommand):
         url = urllib.parse.urlsplit(
             "{}/{}".format(mirrorurl.url, settings.CHECK_TRACE_FILE)
         )
-        try:
-            ftp = ftplib.FTP(url.netloc)
-            ftp.login()
-            ftp.retrlines(
-                "RETR {}".format(url.path), callback=(lambda line: _cb(self, line))
-            )
-            ftp.quit()
-        except Exception as e:
-            return self.mirrorurl_failure(mirrorurl, str(e))
-
-        try:
-            mirrorurl.date_last_trace = dateutil.parser.parse(self._line.strip())
-        except ValueError as e:
-            return self.mirrorurl_failure(mirrorurl, str(e))
+        ftp = ftplib.FTP(url.netloc)
+        ftp.login()
+        ftp.retrlines(
+            "RETR {}".format(url.path), callback=(lambda line: _cb(self, line))
+        )
+        ftp.quit()
+        mirrorurl.date_last_trace = dateutil.parser.parse(self._line.strip())
 
         mirrorurl.check_success = True
         mirrorurl.date_last_success = now
@@ -192,4 +163,7 @@ class Command(BaseCommand):
             protocol__in=["http", "https", "rsync", "ftp"],
         ):
             logging.debug("Checking {}".format(mirrorurl))
-            self.check_mirrorurl(mirrorurl)
+            try:
+                self.check_mirrorurl(mirrorurl)
+            except Exception as e:
+                self.mirrorurl_failure(mirrorurl, str(e))
