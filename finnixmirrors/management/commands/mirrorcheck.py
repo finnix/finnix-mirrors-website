@@ -152,15 +152,23 @@ class Command(BaseCommand):
         mirrorurl.check_detail = "Check OK"
         mirrorurl.save()
 
+    def add_arguments(self, parser):
+        parser.add_argument("--mirror", nargs="*")
+
     def handle(self, *args, **options):
         logging.getLogger("").setLevel(
             logging.DEBUG if int(options["verbosity"]) >= 2 else logging.INFO
         )
 
+        opt_filter = {}
+        if options["mirror"]:
+            opt_filter["mirror__slug__in"] = options["mirror"]
+
         for mirrorurl in MirrorURL.objects.filter(
             enabled=True,
             mirror__enabled=True,
             protocol__in=["http", "https", "rsync", "ftp"],
+            **opt_filter,
         ):
             logging.debug("Checking {}".format(mirrorurl))
             try:
