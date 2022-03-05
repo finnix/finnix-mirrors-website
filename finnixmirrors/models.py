@@ -1,7 +1,9 @@
 import uuid
 
+from django.conf import settings
 from django.db import models
 from django.urls import reverse_lazy
+from django.utils import timezone
 
 
 class Mirror(models.Model):
@@ -54,6 +56,14 @@ class MirrorURL(models.Model):
     date_last_trace = models.DateTimeField(blank=True, null=True)
     head_allowed = models.BooleanField(default=False)
     range_allowed = models.BooleanField(default=False)
+
+    @property
+    def outdated(self):
+        if not self.date_last_trace:
+            return False
+        return self.date_last_trace <= (
+            timezone.now() - timezone.timedelta(hours=settings.OUTDATED_HOURS)
+        )
 
     def __str__(self):
         return "{} {}".format(self.mirror.slug, self.protocol)

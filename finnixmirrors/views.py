@@ -1,11 +1,9 @@
-from datetime import timedelta
 import ipaddress
 import random
 
 from django.conf import settings
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.template import loader
-from django.utils import timezone
 from django.views.generic.detail import DetailView
 
 try:
@@ -32,15 +30,10 @@ class MirrorView(DetailView):
 
 
 def _mirror_populate(mirror):
-    now = timezone.now()
-    outdated_time = now - timedelta(hours=28)
-
     status = "good"
     mirrorurls = mirror.mirrorurl_set.filter(enabled=True)
     for mirrorurl in mirrorurls:
-        setattr(mirrorurl, "outdated", False)
-        if mirrorurl.date_last_trace and mirrorurl.date_last_trace < outdated_time:
-            setattr(mirrorurl, "outdated", True)
+        if mirrorurl.outdated:
             status = "outdated"
     for mirrorurl in mirrorurls:
         if not mirrorurl.check_success:
@@ -132,17 +125,18 @@ def get_geoip_mirror(mirrorurls, ip):
 
 
 def releases(request, path=""):
-    now = timezone.now()
-    outdated_time = now - timedelta(hours=28)
     ip = ipaddress.ip_address(request.META["REMOTE_ADDR"])
 
-    mirrorurls = MirrorURL.objects.filter(
-        enabled=True,
-        protocol="https",
-        check_success=True,
-        date_last_trace__isnull=False,
-        date_last_trace__gte=outdated_time,
-        mirror__enabled=True,
+    def _filter(mirrorurls):
+        return [x for x in mirrorurls if not x.outdated]
+
+    mirrorurls = _filter(
+        MirrorURL.objects.filter(
+            enabled=True,
+            protocol="https",
+            check_success=True,
+            mirror__enabled=True,
+        )
     )
 
     geoip_mirror = get_geoip_mirror(mirrorurls, ip)

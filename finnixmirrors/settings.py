@@ -144,3 +144,6 @@ CHECK_DATA_FILES = [
         ],
     },
 ]
+
+# Number of hours before a mirror is considered outdated
+OUTDATED_HOURS = 28
