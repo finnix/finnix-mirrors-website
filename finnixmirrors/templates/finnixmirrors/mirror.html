@@ -6,7 +6,7 @@
 <h1>Finnix Mirror: {{ mirror.slug }}</h1>
 <div id="map" style="width:100%; height:320px"></div>
 <script type="text/javascript">
-var map = makemap("map", 0, 30, 1);
+var map = makemap("map", {% if mirror.latitude and mirror.longitude %}{{ mirror.longitude }}, {{ mirror.latitude }}{% else %}0, 30{% endif %}, {% if mirror.map_zoom %}{{ mirror.map_zoom }}{% else %}1{% endif %});
 var markers_good = new OpenLayers.Layer.Markers( "Good mirrors" );
 map.addLayer(markers_good);
 var markers_outdated = new OpenLayers.Layer.Markers( "Outdated mirrors" );
