@@ -124,21 +124,22 @@ def get_geoip_mirror(mirrorurls, ip):
     return distances[weighted_distance]
 
 
+def get_mirrorurls():
+    mirrorurls = MirrorURL.objects.filter(
+        enabled=True,
+        protocol="https",
+        check_success=True,
+        mirror__enabled=True,
+    )
+
+    fresh_mirrorurls = [x for x in mirrorurls if not x.outdated]
+    return fresh_mirrorurls if fresh_mirrorurls else mirrorurls
+
+
 def releases(request, path=""):
     ip = ipaddress.ip_address(request.META["REMOTE_ADDR"])
 
-    def _filter(mirrorurls):
-        return [x for x in mirrorurls if not x.outdated]
-
-    mirrorurls = _filter(
-        MirrorURL.objects.filter(
-            enabled=True,
-            protocol="https",
-            check_success=True,
-            mirror__enabled=True,
-        )
-    )
-
+    mirrorurls = get_mirrorurls()
     geoip_mirror = get_geoip_mirror(mirrorurls, ip)
 
     if geoip_mirror:
