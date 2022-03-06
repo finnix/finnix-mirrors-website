@@ -12,9 +12,9 @@ except ImportError as e:
     geoip_db = e
 
 try:
-    from geopy.distance import geodesic
+    from geopy.distance import distance
 except ImportError as e:
-    geodesic = e
+    distance = e
 
 from .models import Mirror, MirrorURL
 
@@ -94,34 +94,42 @@ def index(request):
     return HttpResponse(template.render(context, request))
 
 
-def get_geoip_mirror(mirrorurls, ip):
+def get_geoip_mirrors(mirrorurls, ip):
     if not hasattr(settings, "GEOIP2_DB") or not settings.GEOIP2_DB:
         return
     if isinstance(geoip_db, ImportError):
         return
-    if isinstance(geodesic, ImportError):
+    if isinstance(distance, ImportError):
         return
 
     try:
         with geoip_db.Reader(settings.GEOIP2_DB) as reader:
-            response = reader.city(ip)
-        ip_location = (response.location.latitude, response.location.longitude)
+            geoip_response = reader.city(ip)
+        ip_location = (
+            geoip_response.location.latitude,
+            geoip_response.location.longitude,
+        )
     except Exception:
         return
 
-    distances = {}
+    distances = []
     for mirrorurl in mirrorurls:
         if (not mirrorurl.mirror.latitude) or (not mirrorurl.mirror.longitude):
             continue
         mirror_location = (mirrorurl.mirror.latitude, mirrorurl.mirror.longitude)
-        mirror_distance = geodesic(ip_location, mirror_location).kilometers
+        mirror_distance = distance(ip_location, mirror_location).kilometers
         weighted_distance = mirror_distance / mirrorurl.weight
-        distances[weighted_distance] = (mirrorurl, mirror_distance)
+        distances.append((mirrorurl, mirror_distance, weighted_distance))
 
-    if not distances:
+    return (distances, geoip_response)
+
+
+def get_geoip_mirror(mirrorurls, ip):
+    ret = get_geoip_mirrors(mirrorurls, ip)
+    if not ret:
         return
-    weighted_distance = sorted(distances.keys())[0]
-    return distances[weighted_distance]
+    distances, geoip_response = ret
+    return sorted(distances, key=lambda x: x[2])[0]
 
 
 def get_mirrorurls():
