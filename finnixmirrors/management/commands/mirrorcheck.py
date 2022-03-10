@@ -1,6 +1,7 @@
 import ftplib
 import hashlib
 import logging
+import random
 import subprocess
 import tempfile
 import urllib.parse
@@ -51,7 +52,9 @@ class Command(BaseCommand):
             )
             mirrorurl.date_last_trace = dateutil.parser.parse(r.text.strip())
 
-        for data_file in settings.CHECK_DATA_FILES:
+        for data_file in random.choices(
+            settings.CHECK_DATA_FILES, k=settings.CHECK_DATA_FILE_COUNT
+        ):
             if mirrorurl.head_allowed:
                 r = self.request_url(
                     "{}/{}".format(mirrorurl.url, data_file["path"]), method="HEAD"
@@ -67,7 +70,9 @@ class Command(BaseCommand):
                     )
 
             if mirrorurl.range_allowed:
-                for range in data_file.get("ranges", []):
+                for range in random.choices(
+                    data_file.get("ranges", []), k=settings.CHECK_DATA_FILE_RANGE_COUNT
+                ):
                     r = self.request_url(
                         "{}/{}".format(mirrorurl.url, data_file["path"]),
                         headers={

@@ -144,6 +144,10 @@ CHECK_DATA_FILES = [
         ],
     },
 ]
+# Number of files to test per mirror
+CHECK_DATA_FILE_COUNT = 2
+# Number of ranges to test per file
+CHECK_DATA_FILE_RANGE_COUNT = 2
 
 # Number of hours before a mirror is considered outdated
 OUTDATED_HOURS = 28
