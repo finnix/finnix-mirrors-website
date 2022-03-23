@@ -21,11 +21,12 @@ class Command(BaseCommand):
         "Mozilla/5.0 (compatible; Finnix mirror checker; +https://mirrors.finnix.org/)"
     )
 
+    def __init__(self):
+        self.rs = requests.Session()
+        self.rs.headers.update({"user-agent": self.user_agent})
+
     def request_url(self, url, method="GET", headers=None):
-        full_headers = {"user-agent": self.user_agent}
-        if headers is not None:
-            full_headers.update(headers)
-        r = requests.request(method, url, headers=full_headers, timeout=5)
+        r = self.rs.request(method, url, headers=headers, timeout=5)
         r.raise_for_status()
         return r
 
