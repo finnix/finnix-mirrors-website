@@ -57,13 +57,15 @@ class ChunkHash:
         )
         out = {"path": fn, "length": file_size, "ranges": []}
 
-        if not self.args.positions:
-            self.args.positions = []
+        if self.args.positions:
+            positions = self.args.positions
+        else:
+            positions = []
             for i in range(self.args.hashes):
                 pos = random.randrange(file_size - (file_size % self.args.chunk_size))
-                self.args.positions.append(pos - (pos % self.args.chunk_size))
+                positions.append(pos - (pos % self.args.chunk_size))
 
-        for pos in self.args.positions:
+        for pos in positions:
             f.seek(pos)
             h = hashlib.new(self.args.hash_type, f.read(self.args.chunk_size))
             out["ranges"].append(
