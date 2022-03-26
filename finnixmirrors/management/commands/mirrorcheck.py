@@ -81,16 +81,18 @@ class Command(BaseCommand):
                         },
                     )
 
-                    sha256sum_got = hashlib.sha256(r.content).hexdigest()
-                    if sha256sum_got != range["sha256sum"]:
+                    hash_got = hashlib.new(
+                        range.get("hash_type", "sha256"), r.content
+                    ).hexdigest()
+                    if hash_got != range["hash"]:
                         return self.mirrorurl_failure(
                             mirrorurl,
                             "{} range {}-{}: Expected {}, got {}".format(
                                 data_file["path"],
                                 range["begin"],
                                 range["end"],
-                                range["sha256sum"],
-                                sha256sum_got,
+                                range["hash"],
+                                hash_got,
                             ),
                         )
 
