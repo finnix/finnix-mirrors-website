@@ -1,0 +1,92 @@
+#!/usr/bin/env python3
+
+# SPDX-FileComment: iso_randchunk_hashes
+# SPDX-FileCopyrightText: Copyright (C) 2022 Ryan Finnie
+# SPDX-License-Identifier: MPL-2.0
+
+# Usage: iso_randchunk_hashes finnix.iso | black -q -
+
+import argparse
+import hashlib
+import pathlib
+import random
+import sys
+
+
+class ChunkHash:
+    def parse_args(self):
+        parser = argparse.ArgumentParser(
+            formatter_class=argparse.ArgumentDefaultsHelpFormatter
+        )
+        parser.add_argument(
+            "files", nargs="*", type=pathlib.Path, help="File to operate on"
+        )
+        parser.add_argument(
+            "--hashes",
+            type=int,
+            default=128,
+            help="Number of hashes to generate if --position not specified",
+        )
+        parser.add_argument(
+            "--chunk-size", type=int, default=1024, help="Size of each chunk to hash"
+        )
+        parser.add_argument(
+            "--hash-type", type=str, default="sha256", help="Hash type to use"
+        )
+        parser.add_argument(
+            "--position",
+            type=int,
+            action="append",
+            dest="positions",
+            help="Manual position of each chunk to hash",
+        )
+        parser.add_argument(
+            "--path-base", type=pathlib.Path, help="Relative base for filename display"
+        )
+
+        return parser.parse_args()
+
+    def hash_iso(self, file):
+        f = file.open(mode="rb")
+        file_size = file.stat().st_size
+
+        fn = str(
+            file.relative_to(
+                self.args.path_base if self.args.path_base else file.parent.parent
+            )
+        )
+        out = {"path": fn, "length": file_size, "ranges": []}
+
+        if not self.args.positions:
+            self.args.positions = []
+            for i in range(self.args.hashes):
+                pos = random.randrange(file_size - (file_size % self.args.chunk_size))
+                self.args.positions.append(pos - (pos % self.args.chunk_size))
+
+        for pos in self.args.positions:
+            f.seek(pos)
+            h = hashlib.new(self.args.hash_type, f.read(self.args.chunk_size))
+            out["ranges"].append(
+                {
+                    "begin": pos,
+                    "end": pos + self.args.chunk_size - 1,
+                    "hash": h.hexdigest(),
+                    "hash_type": self.args.hash_type,
+                }
+            )
+
+        f.close()
+        out["ranges"].sort(key=lambda x: x["begin"])
+        return out
+
+    def main(self):
+        self.args = self.parse_args()
+        out = []
+        for file in self.args.files:
+            out.append(self.hash_iso(file))
+        out.sort(key=lambda x: x["path"])
+        print(out)
+
+
+if __name__ == "__main__":
+    sys.exit(ChunkHash().main())
