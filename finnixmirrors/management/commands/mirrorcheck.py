@@ -25,6 +25,13 @@ class Command(BaseCommand):
         self.rs = requests.Session()
         self.rs.headers.update({"user-agent": self.user_agent})
 
+    def safe_sample(self, population, k):
+        if k > len(population):
+            return population
+        elif k < 1:
+            return []
+        return random.sample(population, int(k))
+
     def request_url(self, url, method="GET", headers=None):
         r = self.rs.request(method, url, headers=headers, timeout=5)
         r.raise_for_status()
@@ -53,8 +60,8 @@ class Command(BaseCommand):
             )
             mirrorurl.date_last_trace = dateutil.parser.parse(r.text.strip())
 
-        for data_file in random.choices(
-            settings.CHECK_DATA_FILES, k=settings.CHECK_DATA_FILE_COUNT
+        for data_file in self.safe_sample(
+            settings.CHECK_DATA_FILES, settings.CHECK_DATA_FILE_COUNT
         ):
             if mirrorurl.head_allowed:
                 r = self.request_url(
@@ -71,8 +78,8 @@ class Command(BaseCommand):
                     )
 
             if mirrorurl.range_allowed:
-                for range in random.choices(
-                    data_file.get("ranges", []), k=settings.CHECK_DATA_FILE_RANGE_COUNT
+                for range in self.safe_sample(
+                    data_file.get("ranges", []), settings.CHECK_DATA_FILE_RANGE_COUNT
                 ):
                     r = self.request_url(
                         "{}/{}".format(mirrorurl.url, data_file["path"]),
