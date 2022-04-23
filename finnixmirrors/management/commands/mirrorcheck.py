@@ -154,7 +154,7 @@ class Command(BaseCommand):
         url = urllib.parse.urlsplit(
             "{}/{}".format(mirrorurl.url, settings.CHECK_TRACE_FILE)
         )
-        ftp = ftplib.FTP(url.netloc)
+        ftp = ftplib.FTP(url.netloc, timeout=5)
         ftp.login()
         ftp.retrlines(
             "RETR {}".format(url.path), callback=(lambda line: _cb(self, line))
