@@ -1,11 +1,15 @@
-FROM ubuntu:20.04
+FROM python:3.10
 
-ENV DJANGO_MODULE=finnixmirrors
+WORKDIR /usr/src/app
 
-COPY . /tmp/django
-RUN /tmp/django/docker/build && rm -rf /tmp/django
+COPY . .
+RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install --no-cache-dir gunicorn .
 
-EXPOSE 8000/tcp
+RUN apt-get update && apt-get -y install rsync && apt-get clean
 
 USER nobody
-CMD ["/init"]
+ENV DJANGO_SETTINGS_MODULE="finnixmirrors.settings"
+ENV PYTHONPATH=/usr/local/lib/python
+CMD [ "gunicorn", "-b", "0.0.0.0:8000", "-k", "gthread", "--error-logfile", "-", "--capture-output", "finnixmirrors.wsgi:application" ]
+EXPOSE 8000/tcp

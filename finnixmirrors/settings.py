@@ -117,6 +117,14 @@ USE_TZ = True
 
 STATIC_URL = "/static/"
 
+PASSWORD_HASHERS = [
+    "django.contrib.auth.hashers.Argon2PasswordHasher",
+    "django.contrib.auth.hashers.PBKDF2PasswordHasher",
+    "django.contrib.auth.hashers.PBKDF2SHA1PasswordHasher",
+    "django.contrib.auth.hashers.BCryptSHA256PasswordHasher",
+    "django.contrib.auth.hashers.ScryptPasswordHasher",
+]
+
 # Settings for the "checkmirrors" command
 
 CHECK_TRACE_FILE = "project/trace/feh.colobox.com"

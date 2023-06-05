@@ -13,5 +13,5 @@ setup(
         "finnixmirrors.management.commands",
     ],
     include_package_data=True,
-    install_requires=["Django", "django-xff", "requests", "python-dateutil", "tzdata"],
+    install_requires=["Django", "django[argon2]", "django-xff", "requests", "python-dateutil", "tzdata"],
 )
