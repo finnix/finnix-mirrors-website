@@ -1,8 +1,0 @@
-Django
-django[argon2]
-django-xff
-requests
-python-dateutil
-geoip2
-geopy
-tzdata

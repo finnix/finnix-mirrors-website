@@ -7,9 +7,7 @@ from django.utils import timezone
 
 
 class Mirror(models.Model):
-    id = models.UUIDField(
-        primary_key=True, default=uuid.uuid4, editable=False, blank=False, null=False
-    )
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, blank=False, null=False)
     slug = models.SlugField(unique=True, blank=False, null=False)
     enabled = models.BooleanField(default=True)
     country = models.CharField(max_length=2, blank=True, null=True)
@@ -35,16 +33,10 @@ class MirrorURL(models.Model):
         ("rsync", "Rsync"),
     )
 
-    id = models.UUIDField(
-        primary_key=True, default=uuid.uuid4, editable=False, blank=False, null=False
-    )
-    mirror = models.ForeignKey(
-        Mirror, on_delete=models.CASCADE, blank=False, null=False
-    )
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, blank=False, null=False)
+    mirror = models.ForeignKey(Mirror, on_delete=models.CASCADE, blank=False, null=False)
     url = models.CharField(max_length=4095, blank=True, null=True)
-    protocol = models.CharField(
-        max_length=200, choices=PROTOCOLS, blank=False, null=False
-    )
+    protocol = models.CharField(max_length=200, choices=PROTOCOLS, blank=False, null=False)
     ipv4 = models.BooleanField(default=True)
     ipv6 = models.BooleanField(default=False)
     enabled = models.BooleanField(default=True)
@@ -61,9 +53,7 @@ class MirrorURL(models.Model):
     def outdated(self):
         if not self.date_last_trace:
             return False
-        return self.date_last_trace <= (
-            timezone.now() - timezone.timedelta(hours=settings.OUTDATED_HOURS)
-        )
+        return self.date_last_trace <= (timezone.now() - timezone.timedelta(hours=settings.OUTDATED_HOURS))
 
     def __str__(self):
         return "{} {}".format(self.mirror.slug, self.protocol)

@@ -15,24 +15,16 @@ import sys
 
 class ChunkHash:
     def parse_args(self):
-        parser = argparse.ArgumentParser(
-            formatter_class=argparse.ArgumentDefaultsHelpFormatter
-        )
-        parser.add_argument(
-            "files", nargs="*", type=pathlib.Path, help="File to operate on"
-        )
+        parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
+        parser.add_argument("files", nargs="*", type=pathlib.Path, help="File to operate on")
         parser.add_argument(
             "--hashes",
             type=int,
             default=128,
             help="Number of hashes to generate if --position not specified",
         )
-        parser.add_argument(
-            "--chunk-size", type=int, default=1024, help="Size of each chunk to hash"
-        )
-        parser.add_argument(
-            "--hash-type", type=str, default="sha256", help="Hash type to use"
-        )
+        parser.add_argument("--chunk-size", type=int, default=1024, help="Size of each chunk to hash")
+        parser.add_argument("--hash-type", type=str, default="sha256", help="Hash type to use")
         parser.add_argument(
             "--position",
             type=int,
@@ -40,9 +32,7 @@ class ChunkHash:
             dest="positions",
             help="Manual position of each chunk to hash",
         )
-        parser.add_argument(
-            "--path-base", type=pathlib.Path, help="Relative base for filename display"
-        )
+        parser.add_argument("--path-base", type=pathlib.Path, help="Relative base for filename display")
 
         return parser.parse_args()
 
@@ -50,11 +40,7 @@ class ChunkHash:
         f = file.open(mode="rb")
         file_size = file.stat().st_size
 
-        fn = str(
-            file.relative_to(
-                self.args.path_base if self.args.path_base else file.parent.parent
-            )
-        )
+        fn = str(file.relative_to(self.args.path_base if self.args.path_base else file.parent.parent))
         out = {"path": fn, "length": file_size, "ranges": []}
 
         if self.args.positions:
