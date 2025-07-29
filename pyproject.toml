@@ -22,11 +22,15 @@ dependencies = [
 ]
 dynamic = ["version"]
 
+[project.optional-dependencies]
+gunicorn = ["gunicorn"]
+
 [tool.setuptools.packages.find]
 include = [
     "finnixmirrors",
     "finnixmirrors.migrations",
     "finnixmirrors.management.commands",
+    "finnixmirrors.tests",
 ]
 
 [tool.black]
