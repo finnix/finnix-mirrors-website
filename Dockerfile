@@ -5,6 +5,7 @@ FROM python:3.12
 
 COPY . /tmp/build
 RUN pip install --no-cache-dir '/tmp/build[gunicorn]' && useradd -ms /bin/bash app && rm -rf /tmp/build
+RUN apt-get update && apt-get -y install rsync && apt-get clean
 
 ENV DJANGO_SETTINGS_MODULE="finnixmirrors.settings"
 USER app
