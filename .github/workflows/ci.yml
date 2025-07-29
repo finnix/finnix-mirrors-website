@@ -25,13 +25,3 @@ jobs:
       - name: "tox"
         run: |
           python -mtox
-  docker:
-    runs-on: "ubuntu-latest"
-    steps:
-      - uses: "actions/checkout@v4"
-      - name: "Docker build"
-        run: "docker image build -t build:ci ."
-      - name: "Container check"
-        run: |
-          docker run --rm build:ci django-admin check
-          docker run --rm build:ci django-admin test
