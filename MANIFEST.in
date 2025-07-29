@@ -1,0 +1,5 @@
+# SPDX-PackageSummary: finnix-mirrors-website
+# SPDX-FileCopyrightText: Copyright (C) 2020-2025 Ryan Finnie
+# SPDX-License-Identifier: MPL-2.0
+recursive-include finnixmirrors/static *
+recursive-include finnixmirrors/templates *
