@@ -1,3 +1,10 @@
+/*
+SPDX-PackageName: finnix-mirrors-website
+SPDX-PackageSupplier: Ryan Finnie <ryan@finnie.org>
+SPDX-PackageDownloadLocation: https://github.com/finnix/finnix-mirrors-website
+SPDX-FileCopyrightText: © 2020 Ryan Finnie <ryan@finnie.org>
+SPDX-License-Identifier: MPL-2.0
+*/
 var icon_green = new OpenLayers.Icon(
   fmStaticPath + '/mm_20_green.png',
   new OpenLayers.Size(12,20),

@@ -1,4 +1,18 @@
 /*
+SPDX-PackageName: openlayers
+SPDX-FileCopyrightText: © 2005 OpenLayers Contributors
+SPDX-License-Identifier: BSD-2-Clause
+SPDX-FileCopyrightText: © 2005 Sam Stephenson <sam@conio.net>
+SPDX-License-Identifier: MIT
+SPDX-FileCopyrightText: © 2005 Sabre Airline Solutions
+SPDX-License-Identifier: Apache-2.0
+SPDX-FileCopyrightText: © 2007 Sergey Ilinsky
+SPDX-License-Identifier: Apache-2.0
+SPDX-FileCopyrightText: © 2007 Google Inc.
+SPDX-License-Identifier: BSD-3-Clause
+SPDX-FileCopyrightText: © 2006 Yahoo! Inc.
+SPDX-License-Identifier: BSD-3-Clause
+*//*
 
   OpenLayers.js -- OpenLayers Map Viewer Library
 

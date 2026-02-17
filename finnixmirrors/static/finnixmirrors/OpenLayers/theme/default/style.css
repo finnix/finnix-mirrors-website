@@ -1,3 +1,8 @@
+/*
+SPDX-PackageName: openlayers
+SPDX-FileCopyrightText: © 2005 OpenLayers Contributors
+SPDX-License-Identifier: BSD-2-Clause
+*/
 div.olMap {
     z-index: 0;
     padding: 0 !important;

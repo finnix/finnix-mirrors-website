@@ -1,3 +1,9 @@
+# SPDX-PackageName: finnix-mirrors-website
+# SPDX-PackageSupplier: Ryan Finnie <ryan@finnie.org>
+# SPDX-PackageDownloadLocation: https://github.com/finnix/finnix-mirrors-website
+# SPDX-FileCopyrightText: © 2020 Ryan Finnie <ryan@finnie.org>
+# SPDX-License-Identifier: MPL-2.0
+
 from django.contrib import admin
 
 from .models import MirrorURL, Mirror

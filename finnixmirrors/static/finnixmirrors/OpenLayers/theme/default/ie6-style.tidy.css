@@ -1,1 +1,6 @@
+/*
+SPDX-PackageName: openlayers
+SPDX-FileCopyrightText: © 2005 OpenLayers Contributors
+SPDX-License-Identifier: BSD-2-Clause
+*/
 .olControlZoomPanel div{background-image:url(img/zoom-panel-NOALPHA.png);}.olControlPanPanel div{background-image:url(img/pan-panel-NOALPHA.png);}.olControlEditingToolbar{width:200px;}

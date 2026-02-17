@@ -1,3 +1,9 @@
+# SPDX-PackageName: finnix-mirrors-website
+# SPDX-PackageSupplier: Ryan Finnie <ryan@finnie.org>
+# SPDX-PackageDownloadLocation: https://github.com/finnix/finnix-mirrors-website
+# SPDX-FileCopyrightText: © 2020 Ryan Finnie <ryan@finnie.org>
+# SPDX-License-Identifier: MPL-2.0
+
 import uuid
 
 from django.conf import settings
