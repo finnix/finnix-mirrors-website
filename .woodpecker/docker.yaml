@@ -13,8 +13,9 @@ steps:
     image: "docker:cli"
     commands: |
       IMAGE_NAME="$(echo "$${CI_REPO}" | tr '[:upper:]' '[:lower:]')"
-      IMAGE_TAG="$${CI_WORKFLOW_NAME}-$${ARCH}"
+      IMAGE_TAG="$${CI_WORKFLOW_NAME}-$(echo "$${CI_SYSTEM_PLATFORM}" | sed 's,/,-,g')"
       IMAGE_ID="build/$${IMAGE_NAME}:$${IMAGE_TAG}"
+      echo "Building: $${IMAGE_ID}"
       docker image build -t "$${IMAGE_ID}" .
       docker run --rm "$${IMAGE_ID}" django-admin check
       docker run --rm "$${IMAGE_ID}" django-admin test
