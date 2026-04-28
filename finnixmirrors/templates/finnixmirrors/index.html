@@ -1,6 +1,6 @@
 {#- SPDX-PackageName: finnix-mirrors-website #}
 {#- SPDX-PackageSupplier: Ryan Finnie <ryan@finnie.org> #}
-{#- SPDX-PackageDownloadLocation: https://github.com/finnix/finnix-mirrors-website #}
+{#- SPDX-PackageDownloadLocation: https://codeberg.org/finnix/finnix-mirrors-website #}
 {#- SPDX-FileCopyrightText: © 2020 Ryan Finnie <ryan@finnie.org> #}
 {#- SPDX-License-Identifier: MPL-2.0 #}
 {% extends "./base.html" %}
@@ -47,5 +47,5 @@ setMarker(map, {{ mirror.longitude }}, {{ mirror.latitude }}, icon_{% if mirror.
 </script>
 {% endfor %}
 </table>
-<p class="text-right"><a href="https://github.com/finnix/finnix-docs/blob/main/mirrors.md">General mirror information</a> • <a href="https://www.finnix.org/">Finnix</a></p>
+<p class="text-right"><a href="https://codeberg.org/finnix/finnix-docs/blob/main/mirrors.md">General mirror information</a> • <a href="https://www.finnix.org/">Finnix</a></p>
 {% endblock %}

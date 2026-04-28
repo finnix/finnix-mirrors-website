@@ -2,7 +2,7 @@
 
 # SPDX-PackageName: finnix-mirrors-website
 # SPDX-PackageSupplier: Ryan Finnie <ryan@finnie.org>
-# SPDX-PackageDownloadLocation: https://github.com/finnix/finnix-mirrors-website
+# SPDX-PackageDownloadLocation: https://codeberg.org/finnix/finnix-mirrors-website
 # SPDX-FileComment: iso_randchunk_hashes
 # SPDX-FileCopyrightText: © 2022 Ryan Finnie <ryan@finnie.org>
 # SPDX-License-Identifier: MPL-2.0
