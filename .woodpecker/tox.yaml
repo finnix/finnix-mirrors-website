@@ -9,7 +9,7 @@ when:
 labels:
   platform: "linux/amd64"
 steps:
-  - name: "CI build"
+  - name: "tox"
     image: "python:3.14-trixie"
     commands: |
       python -mpip install tox
