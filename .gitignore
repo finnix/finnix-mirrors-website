@@ -1,6 +1,6 @@
 # SPDX-PackageName: finnix-mirrors-website
 # SPDX-PackageSupplier: Ryan Finnie <ryan@finnie.org>
-# SPDX-PackageDownloadLocation: https://codeberg.org/finnix/finnix-mirrors-website
+# SPDX-PackageDownloadLocation: https://forge.colobox.com/finnix/finnix-mirrors-website
 # SPDX-FileCopyrightText: © 2020 Ryan Finnie <ryan@finnie.org>
 # SPDX-License-Identifier: MPL-2.0
 db.sqlite3
