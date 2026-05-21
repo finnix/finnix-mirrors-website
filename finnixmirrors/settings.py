@@ -17,6 +17,7 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 
 import os
+import uuid
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -165,3 +166,5 @@ CHECK_DATA_FILE_RANGE_COUNT = 2
 
 # Number of hours before a mirror is considered outdated
 OUTDATED_HOURS = 28
+
+PYINFO_KEY = str(uuid.uuid4())

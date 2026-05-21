@@ -1,0 +1,294 @@
+{#- SPDX-FileCopyrightText: © 2019 Amos Vryhof #}
+{#- SPDX-FileCopyrightText: © 2026 Ryan Finnie <ryan@finnie.org> #}
+{#- SPDX-License-Identifier: MIT #}
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <style type="text/css">
+        body {
+            background-color: #fff;
+            color: #222;
+            font-family: sans-serif;
+        }
+
+        pre {
+            margin: 0;
+            font-family: monospace;
+        }
+
+        a:link {
+            color: #009;
+            text-decoration: none;
+            background-color: #fff;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        table {
+            border-collapse: collapse;
+            border: 0;
+            width: 934px;
+            box-shadow: 1px 2px 3px #ccc;
+        }
+
+        .center {
+            text-align: center;
+        }
+
+        .center table {
+            margin: 1em auto;
+            text-align: left;
+        }
+
+        .center th {
+            text-align: center !important;
+        }
+
+        td, th {
+            border: 1px solid #666;
+            font-size: 75%;
+            vertical-align: baseline;
+            padding: 4px 5px;
+        }
+
+        h1 {
+            font-size: 150%;
+        }
+
+        h2 {
+            font-size: 125%;
+        }
+
+        .p {
+            text-align: left;
+        }
+
+        .e {
+            background-color: #ccf;
+            width: 300px;
+            font-weight: bold;
+        }
+
+        .h {
+            background-color: #99c;
+            font-weight: bold;
+        }
+
+        .v {
+            background-color: #ddd;
+            max-width: 300px;
+            overflow-x: auto;
+            word-wrap: break-word;
+        }
+
+        .v i {
+            color: #999;
+        }
+
+        svg.logo {
+            float: right;
+            border: 0;
+            width: 60px;
+            height: 60px;
+        }
+
+        hr {
+            width: 934px;
+            background-color: #ccc;
+            border: 0;
+            height: 1px;
+        }
+    </style>
+    <title>Python {{ python_version }} - pyinfo()</title>
+    <meta name="ROBOTS" content="NOINDEX,NOFOLLOW,NOARCHIVE"/>
+</head>
+<body>
+<div class="center">
+    <table>
+        <tr class="h">
+            <td>
+                <a href="https://www.python.org/" target="_blank">
+                    <svg class="logo" version="1.1" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://web.resource.org/cc/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:svg="http://www.w3.org/2000/svg" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="110px" height="110px" viewBox="0.21 -0.077 110 110" enable-background="new 0.21 -0.077 110 110" xml:space="preserve"><linearGradient id="SVGID_1_" gradientUnits="userSpaceOnUse" x1="63.8159" y1="56.6829" x2="118.4934" y2="1.8225" gradientTransform="matrix(1 0 0 -1 -53.2974 66.4321)"> <stop offset="0" style="stop-color:#387EB8"/> <stop offset="1" style="stop-color:#366994"/></linearGradient><path fill="url(#SVGID_1_)" d="M55.023-0.077c-25.971,0-26.25,10.081-26.25,12.156c0,3.148,0,12.594,0,12.594h26.75v3.781 c0,0-27.852,0-37.375,0c-7.949,0-17.938,4.833-17.938,26.25c0,19.673,7.792,27.281,15.656,27.281c2.335,0,9.344,0,9.344,0 s0-9.765,0-13.125c0-5.491,2.721-15.656,15.406-15.656c15.91,0,19.971,0,26.531,0c3.902,0,14.906-1.696,14.906-14.406 c0-13.452,0-17.89,0-24.219C82.054,11.426,81.515-0.077,55.023-0.077z M40.273,8.392c2.662,0,4.813,2.15,4.813,4.813 c0,2.661-2.151,4.813-4.813,4.813s-4.813-2.151-4.813-4.813C35.46,10.542,37.611,8.392,40.273,8.392z"/><linearGradient id="SVGID_2_" gradientUnits="userSpaceOnUse" x1="97.0444" y1="21.6321" x2="155.6665" y2="-34.5308" gradientTransform="matrix(1 0 0 -1 -53.2974 66.4321)"> <stop offset="0" style="stop-color:#FFE052"/> <stop offset="1" style="stop-color:#FFC331"/></linearGradient><path fill="url(#SVGID_2_)" d="M55.397,109.923c25.959,0,26.282-10.271,26.282-12.156c0-3.148,0-12.594,0-12.594H54.897v-3.781 c0,0,28.032,0,37.375,0c8.009,0,17.938-4.954,17.938-26.25c0-23.322-10.538-27.281-15.656-27.281c-2.336,0-9.344,0-9.344,0 s0,10.216,0,13.125c0,5.491-2.631,15.656-15.406,15.656c-15.91,0-19.476,0-26.532,0c-3.892,0-14.906,1.896-14.906,14.406 c0,14.475,0,18.265,0,24.219C28.366,100.497,31.562,109.923,55.397,109.923z M70.148,101.454c-2.662,0-4.813-2.151-4.813-4.813 s2.15-4.813,4.813-4.813c2.661,0,4.813,2.151,4.813,4.813S72.809,101.454,70.148,101.454z"/></svg>
+                </a>
+                <h1 class="p">Python Version {{ python_version }}</h1>
+            </td>
+        </tr>
+    </table>
+    <table>
+        <tr>
+            <td class="e">System</td>
+            <td class="v">{{ os_version }}</td>
+        </tr>
+        <tr>
+            <td class="e">Platform</td>
+            <td class="v">{{ os_platform }}</td>
+        </tr>
+        <tr>
+            <td class="e">Build Date</td>
+            <td class="v">{{ build_date }}</td>
+        </tr>
+        <tr>
+            <td class="e">API Version</td>
+            <td class="v">{{ api_version }}</td>
+        </tr>
+        <tr>
+            <td class="e">Server API</td>
+            <td class="v">{{ server_api }}</td>
+        </tr>
+        <tr>
+            <td class="e">Executable</td>
+            <td class="v">{{ python_interpreter }}</td>
+        </tr>
+        <tr>
+            <td class="e">Path</td>
+            <td class="v">
+                <ul>
+                    {% for path_dir in python_path %}
+                        <li>{{ path_dir }}</li>
+                    {% endfor %}
+                </ul>
+            </td>
+        </tr>
+        <tr>
+            <td class="e">Import Path</td>
+            <td class="v">
+                <ul>
+                    {% for path_dir in import_path %}
+                        <li>{{ path_dir }}</li>
+                    {% endfor %}
+                </ul>
+            </td>
+        </tr>
+    </table>
+    <h2 id="packages">Packages</h2>
+    <table>
+        {% for package in packages %}
+            <tr>
+                <td class="e">{{ package.name }}</td>
+                <td class="v">{{ package.version }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+    <h2 id="os_environment">os.environ</h2>
+    <table>
+        {% for var_name, var_val in os_environment.items %}
+            <tr>
+                <td class="e">{{ var_name }}</td>
+                <td class="v">{{ var_val }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+    <h2 id="request">request</h2>
+    <table>
+        <tr>
+            <td class="e">encoding</td>
+            <td class="v">{{ request.encoding }}</td>
+        </tr>
+        <tr>
+            <td class="e">content_type</td>
+            <td class="v">{{ request.content_type }}</td>
+        </tr>
+        <tr>
+            <td class="e">content_params</td>
+            <td class="v">{{ request.content_params }}</td>
+        </tr>
+        <tr>
+            <td class="e">current_app</td>
+            <td class="v">{{ request.current_app }}</td>
+        </tr>
+        <tr>
+            <td class="e">urlconf</td>
+            <td class="v">{{ request.urlconf }}</td>
+        </tr>
+        <tr>
+            <td class="e">resolver_match</td>
+            <td class="v">{{ request.resolver_match }}</td>
+        </tr>
+    </table>
+    <h2 id="request_environ">request.environ</h2>
+    <table>
+        {% for var_name, var_val in request.environ.items %}
+            <tr>
+                <td class="e">{{ var_name }}</td>
+                <td class="v">{{ var_val }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+    <h2 id="request_session">request.session</h2>
+    <table>
+        {% for var_name, var_val in request.session.items %}
+            <tr>
+                <td class="e">{{ var_name }}</td>
+                <td class="v">{{ var_val }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+    <h2 id="request_cookies">request.COOKIES</h2>
+    <table>
+        {% for var_name, var_val in request.COOKIES.items %}
+            <tr>
+                <td class="e">{{ var_name }}</td>
+                <td class="v">{{ var_val }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+    <h2 id="request_get">request.GET</h2>
+    <table>
+        {% for var_name, var_val in request.GET.items %}
+            <tr>
+                <td class="e">{{ var_name }}</td>
+                <td class="v">{{ var_val }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+    <h2 id="request_post">request.POST</h2>
+    <table>
+        {% for var_name, var_val in request.POST.items %}
+            <tr>
+                <td class="e">{{ var_name }}</td>
+                <td class="v">{{ var_val }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+    <h2 id="request_files">request.FILES</h2>
+    <table>
+        {% for var_name, var_val in request.FILES.items %}
+            <tr>
+                <td class="e">{{ var_name }}</td>
+                <td class="v">{{ var_val }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+    <h2 id="request_meta">request.META</h2>
+    <table>
+        {% for var_name, var_val in request.META.items %}
+            <tr>
+                <td class="e">{{ var_name }}</td>
+                <td class="v">{{ var_val }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+    <h2 id="request_headers">request.headers</h2>
+    <table>
+        {% for var_name, var_val in request.headers.items %}
+            <tr>
+                <td class="e">{{ var_name }}</td>
+                <td class="v">{{ var_val }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+    <h2 id="copyright">Copyright</h2>
+    <table>
+        <tbody>
+        <tr class="v">
+            <td>
+                {{ copyright }}
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>
