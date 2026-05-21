@@ -23,11 +23,11 @@ from finnixmirrors.models import MirrorURL
 
 class Command(BaseCommand):
     help = "Mirror check"
-    user_agent = "Mozilla/5.0 (compatible; Finnix mirror checker; +https://mirrors.finnix.org/)"
 
     def __init__(self):
         self.rs = requests.Session()
-        self.rs.headers.update({"user-agent": self.user_agent})
+        url = "https://forge.colobox.com/finnix/finnix-mirrors-website"
+        self.rs.headers.update({"User-Agent": "{} (Finnix mirror checker; +{})".format(requests.utils.default_user_agent(), url)})
 
     def safe_sample(self, population, k):
         if k > len(population):
