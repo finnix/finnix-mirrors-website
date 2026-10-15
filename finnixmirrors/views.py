@@ -111,6 +111,7 @@ def get_geoip_mirrors(mirrorurls, ip):
     try:
         with geoip_db.Reader(settings.GEOIP2_DB) as reader:
             geoip_response = reader.city(ip)
+            geoip_metadata = reader.metadata()
         ip_location = (
             geoip_response.location.latitude,
             geoip_response.location.longitude,
@@ -127,14 +128,14 @@ def get_geoip_mirrors(mirrorurls, ip):
         weighted_distance = mirror_distance / mirrorurl.weight
         distances.append((mirrorurl, mirror_distance, weighted_distance))
 
-    return (distances, geoip_response)
+    return (distances, geoip_response, geoip_metadata)
 
 
 def get_geoip_mirror(mirrorurls, ip):
     ret = get_geoip_mirrors(mirrorurls, ip)
     if not ret:
         return
-    distances, geoip_response = ret
+    distances, geoip_response, _ = ret
     return sorted(distances, key=lambda x: x[2])[0]
 
 

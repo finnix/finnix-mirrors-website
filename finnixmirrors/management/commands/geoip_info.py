@@ -38,8 +38,13 @@ class Command(BaseCommand):
         if not ret:
             print("No GeoIP information for {}".format(ip))
             return
-        distances, geoip_response = ret
+        distances, geoip_response, geoip_metadata = ret
 
+        print("Database:")
+        for k in dir(geoip_metadata):
+            if k.startswith("_"):
+                continue
+            print("    {}: {}".format(k, getattr(geoip_metadata, k)))
         print("IP: {}".format(ip))
         print(
             "GeoIP (https://www.openstreetmap.org/?mlat={}&mlon={}):".format(
