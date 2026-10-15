@@ -9,20 +9,6 @@
 
 {% block content %}
 <h1>Finnix Mirror: {{ mirror.slug }}</h1>
-<div id="map" style="width:100%; height:320px"></div>
-<script type="text/javascript">
-var map = makemap("map", {% if mirror.latitude and mirror.longitude %}{{ mirror.longitude }}, {{ mirror.latitude }}{% else %}0, 30{% endif %}, {% if mirror.map_zoom %}{{ mirror.map_zoom }}{% else %}1{% endif %});
-var markers_good = new OpenLayers.Layer.Markers( "Good mirrors" );
-map.addLayer(markers_good);
-var markers_outdated = new OpenLayers.Layer.Markers( "Outdated mirrors" );
-map.addLayer(markers_outdated);
-var markers_error = new OpenLayers.Layer.Markers( "Down mirrors" );
-map.addLayer(markers_error);
-</script>
-
-<script type="text/javascript">
-setMarker(map, {{ mirror.longitude }}, {{ mirror.latitude }}, icon_{% if mirror.status == 'error' %}red{% elif mirror.status == 'outdated' %}orange{% else %}green{% endif %}, markers_{% if not mirror.status == 'error' %}error{% elif mirror.status == 'outdated' %}outdated{% else %}good{% endif %}, '{{ mirror.slug }}', 0);
-</script>
 {% for mirrorurl in mirror.mirrorurls|dictsort:"protocol" %}
 <p></p>
 <table class="table">
