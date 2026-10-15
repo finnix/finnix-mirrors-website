@@ -46,7 +46,10 @@ class Command(BaseCommand):
                 geoip_response.location.latitude, geoip_response.location.longitude
             )
         )
-        geo = geoip_response.raw
+        if hasattr(geoip_response, "to_dict"):
+            geo = geoip_response.to_dict()
+        else:
+            geo = geoip_response.raw
         collapse_names(geo)
         for k, v in geo.items():
             print("    {} = {}".format(k, v))
