@@ -9,6 +9,7 @@ MANIFEST
 .pybuild/
 .pytest_cache/
 work/
+GeoLite*.mmdb
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
